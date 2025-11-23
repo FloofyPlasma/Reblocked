@@ -19,6 +19,10 @@ class TestState : public Engine::State::GameState
 	void handleInput(const Engine::Core::InputManager& input) override;
 
 	private:
+	bool tryMovePiece(const glm::ivec3& delta);
+	bool tryRotatePiece(void (World::Piece::*rotateFunc)());
+	void lockPiece();
+
 	std::unique_ptr<World::Grid> m_grid;
 	std::unique_ptr<World::Piece> m_piece;
 

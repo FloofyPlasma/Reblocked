@@ -6,6 +6,8 @@ add_library(ReblockedGame STATIC
 
     Rendering/GridRenderer.cpp
     Rendering/PieceRenderer.cpp
+
+    Gameplay/CollisionDetector.cpp
 )
 
 target_include_directories(ReblockedGame PUBLIC ${PROJECT_SOURCE_DIR}/include)

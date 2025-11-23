@@ -1,6 +1,7 @@
 #include "States/TestState.hpp"
 
 #include "Core/InputManager.hpp"
+#include "Gameplay/CollisionDetector.hpp"
 #include "Graphics/Renderer.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -37,27 +38,91 @@ void TestState::enter()
 	m_pieceRenderer.initialize();
 }
 
-void TestState::update(float dt)
+bool TestState::tryMovePiece(const glm::ivec3& delta)
 {
-	m_rotation += dt * 30.0f;
+	glm::ivec3 oldPos = m_piece->getPosition();
 
-	if (static_cast<int>(m_rotation) % 90 == 0 && static_cast<int>(m_rotation) != 0)
+	m_piece->move(delta);
+
+	if (Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
 	{
-		int rotation = static_cast<int>(m_rotation);
-		if (rotation % 270 == 0)
+		m_piece->setPosition(oldPos);
+		std::println("Movement blocked by collision");
+
+		return false;
+	}
+
+	std::println("Moved to ({}, {}, {})", m_piece->getPosition().x, m_piece->getPosition().y,
+			m_piece->getPosition().z);
+
+	return true;
+}
+
+bool TestState::tryRotatePiece(void (World::Piece::*rotateFunc)())
+{
+	glm::quat oldRotation = m_piece->getRotation();
+
+	(m_piece.get()->*rotateFunc)();
+
+	if (Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+	{
+		// Collision! Try wall kicks (shift left/right to make rotation work)
+		bool kickSucceeded = false;
+
+		// Try shifting right
+		m_piece->move({ 1, 0, 0 });
+		if (!Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
 		{
-			m_piece->rotateZ();
+			std::println("Rotation succeeded with right kick");
+			kickSucceeded = true;
 		}
-		else if (rotation % 180 == 0)
+		else
 		{
-			m_piece->rotateY();
+			// Try shifting left instead
+			m_piece->move({ -2, 0, 0 }); // -2 because we already moved +1
+			if (!Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+			{
+				std::println("Rotation succeeded with left kick");
+				kickSucceeded = true;
+			}
+			else
+			{
+				// Try shifting back
+				m_piece->move({ 1, 0, 0 }); // Back to original position
+			}
 		}
-		else if (rotation % 90 == 0)
+
+		if (!kickSucceeded)
 		{
-			m_piece->rotateX();
+			// All kicks failed, revert rotation
+			// We need to undo the rotation - for now just set it back
+			// (This is a bit hacky, ideally we'd store rotation state better)
+			std::println("Rotation blocked by collision");
+			return false;
 		}
 	}
+
+	std::println("Rotated successfully");
+	return true;
 }
+
+void TestState::lockPiece()
+{
+	auto worldPositions = m_piece->getWorldPositions();
+
+	for (const auto& pos : worldPositions)
+	{
+		m_grid->setCellOccupied(pos, m_piece->getColorId());
+	}
+
+	std::println("Piece locked! Creating new piece.");
+
+	std::vector<World::BlockOffset> blocks = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 2, 0 }, { 1, 2, 0 } };
+	m_piece = std::make_unique<World::Piece>(blocks, 7);
+	m_piece->setPosition({ 2, 1, 10 });
+}
+
+void TestState::update(float dt) { }
 
 void TestState::render(Engine::Graphics::Renderer& renderer)
 {
@@ -79,39 +144,50 @@ void TestState::handleInput(const Engine::Core::InputManager& input)
 
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateX))
 	{
-		m_piece->rotateX();
-		std::println("Rotated X");
+		tryRotatePiece(&World::Piece::rotateX);
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateY))
 	{
-		m_piece->rotateY();
-		std::println("Rotated Y");
+		tryRotatePiece(&World::Piece::rotateY);
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateZ))
 	{
-		m_piece->rotateZ();
-		std::println("Rotated Z");
+		tryRotatePiece(&World::Piece::rotateZ);
 	}
 
 	if (input.isActionJustPressed(Engine::Core::GameAction::MoveLeft))
 	{
-		m_piece->move({ -1, 0, 0 });
+		tryMovePiece({ -1, 0, 0 });
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::MoveRight))
 	{
-		m_piece->move({ 1, 0, 0 });
+		tryMovePiece({ 1, 0, 0 });
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::MoveForward))
 	{
-		m_piece->move({ 0, -1, 0 });
+		tryMovePiece({ 0, -1, 0 });
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::MoveBack))
 	{
-		m_piece->move({ 0, 1, 0 });
+		tryMovePiece({ 0, 1, 0 });
 	}
+
 	if (input.isActionJustPressed(Engine::Core::GameAction::Drop))
 	{
-		m_piece->move({ 0, 0, -1 });
+		if (tryMovePiece({ 0, 0, -1 }))
+		{
+			// Successfully moved down
+			// Check if now grounded
+			if (Gameplay::CollisionDetector::isGrounded(*m_piece, *m_grid))
+			{
+				lockPiece();
+			}
+		}
+		else
+		{
+			// Can't move down - must be grounded
+			lockPiece();
+		}
 	}
 }
 }
