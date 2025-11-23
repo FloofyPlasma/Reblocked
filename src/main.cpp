@@ -18,7 +18,7 @@ int main()
 	auto& stateMachine = app.getStateMachine();
 
 	stateMachine.registerState(
-			"test", []() { return std::make_unique<Reblocked::Game::States::TestState>(); });
+			"test", []() { return std::make_unique<Reblocked::Game::TestState>(); });
 
 	stateMachine.transitionTo("test");
 

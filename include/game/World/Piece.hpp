@@ -5,7 +5,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <vector>
 
-namespace Reblocked::Game::World
+namespace Reblocked::Game
 {
 
 struct BlockOffset

@@ -7,13 +7,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <print>
 
-namespace Reblocked::Game::States
+namespace Reblocked::Game
 {
 void TestState::enter()
 {
 	std::println("TestState entered");
 
-	m_grid = std::make_unique<World::Grid>(glm::ivec3(5, 5, 18));
+	m_grid = std::make_unique<Grid>(glm::ivec3(5, 5, 18));
 
 	m_grid->setCellOccupied({ 0, 0, 0 }, 1); // Red
 	m_grid->setCellOccupied({ 1, 0, 0 }, 2); // Green
@@ -29,8 +29,8 @@ void TestState::enter()
 		}
 	}
 
-	std::vector<World::BlockOffset> blocks = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 2, 0 }, { 1, 2, 0 } };
-	m_piece = std::make_unique<World::Piece>(blocks, 7); // Orange
+	std::vector<BlockOffset> blocks = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 2, 0 }, { 1, 2, 0 } };
+	m_piece = std::make_unique<Piece>(blocks, 7); // Orange
 	m_piece->setPosition({ 2, 2, 5 }); // Floating above grid
 
 	// Initialize renderers
@@ -44,7 +44,7 @@ bool TestState::tryMovePiece(const glm::ivec3& delta)
 
 	m_piece->move(delta);
 
-	if (Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+	if (CollisionDetector::checkCollision(*m_piece, *m_grid))
 	{
 		m_piece->setPosition(oldPos);
 		std::println("Movement blocked by collision");
@@ -58,20 +58,20 @@ bool TestState::tryMovePiece(const glm::ivec3& delta)
 	return true;
 }
 
-bool TestState::tryRotatePiece(void (World::Piece::*rotateFunc)())
+bool TestState::tryRotatePiece(void (Piece::*rotateFunc)())
 {
 	glm::quat oldRotation = m_piece->getRotation();
 
 	(m_piece.get()->*rotateFunc)();
 
-	if (Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+	if (CollisionDetector::checkCollision(*m_piece, *m_grid))
 	{
 		// Collision! Try wall kicks (shift left/right to make rotation work)
 		bool kickSucceeded = false;
 
 		// Try shifting right
 		m_piece->move({ 1, 0, 0 });
-		if (!Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+		if (!CollisionDetector::checkCollision(*m_piece, *m_grid))
 		{
 			std::println("Rotation succeeded with right kick");
 			kickSucceeded = true;
@@ -80,7 +80,7 @@ bool TestState::tryRotatePiece(void (World::Piece::*rotateFunc)())
 		{
 			// Try shifting left instead
 			m_piece->move({ -2, 0, 0 }); // -2 because we already moved +1
-			if (!Gameplay::CollisionDetector::checkCollision(*m_piece, *m_grid))
+			if (!CollisionDetector::checkCollision(*m_piece, *m_grid))
 			{
 				std::println("Rotation succeeded with left kick");
 				kickSucceeded = true;
@@ -117,8 +117,8 @@ void TestState::lockPiece()
 
 	std::println("Piece locked! Creating new piece.");
 
-	std::vector<World::BlockOffset> blocks = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 2, 0 }, { 1, 2, 0 } };
-	m_piece = std::make_unique<World::Piece>(blocks, 7);
+	std::vector<BlockOffset> blocks = { { 0, 0, 0 }, { 0, 1, 0 }, { 0, 2, 0 }, { 1, 2, 0 } };
+	m_piece = std::make_unique<Piece>(blocks, 7);
 	m_piece->setPosition({ 2, 1, 10 });
 }
 
@@ -144,15 +144,15 @@ void TestState::handleInput(const Engine::Core::InputManager& input)
 
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateX))
 	{
-		tryRotatePiece(&World::Piece::rotateX);
+		tryRotatePiece(&Piece::rotateX);
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateY))
 	{
-		tryRotatePiece(&World::Piece::rotateY);
+		tryRotatePiece(&Piece::rotateY);
 	}
 	if (input.isActionJustPressed(Engine::Core::GameAction::RotateZ))
 	{
-		tryRotatePiece(&World::Piece::rotateZ);
+		tryRotatePiece(&Piece::rotateZ);
 	}
 
 	if (input.isActionJustPressed(Engine::Core::GameAction::MoveLeft))
@@ -178,7 +178,7 @@ void TestState::handleInput(const Engine::Core::InputManager& input)
 		{
 			// Successfully moved down
 			// Check if now grounded
-			if (Gameplay::CollisionDetector::isGrounded(*m_piece, *m_grid))
+			if (CollisionDetector::isGrounded(*m_piece, *m_grid))
 			{
 				lockPiece();
 			}

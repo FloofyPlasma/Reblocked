@@ -6,7 +6,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Reblocked::Game::Rendering
+namespace Reblocked::Game
 {
 
 void PieceRenderer::initialize()
@@ -14,7 +14,7 @@ void PieceRenderer::initialize()
 	m_cubeMesh = Engine::Graphics::MeshBuilder::createCube(1.0f, { 1, 1, 1 });
 }
 
-void PieceRenderer::render(const World::Piece& piece, Engine::Graphics::Renderer& renderer)
+void PieceRenderer::render(const Piece& piece, Engine::Graphics::Renderer& renderer)
 {
 	if (!m_cubeMesh)
 	{

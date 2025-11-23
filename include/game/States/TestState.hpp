@@ -8,7 +8,7 @@
 
 #include <memory>
 
-namespace Reblocked::Game::States
+namespace Reblocked::Game
 {
 class TestState : public Engine::State::GameState
 {
@@ -20,14 +20,14 @@ class TestState : public Engine::State::GameState
 
 	private:
 	bool tryMovePiece(const glm::ivec3& delta);
-	bool tryRotatePiece(void (World::Piece::*rotateFunc)());
+	bool tryRotatePiece(void (Piece::*rotateFunc)());
 	void lockPiece();
 
-	std::unique_ptr<World::Grid> m_grid;
-	std::unique_ptr<World::Piece> m_piece;
+	std::unique_ptr<Grid> m_grid;
+	std::unique_ptr<Piece> m_piece;
 
-	Rendering::GridRenderer m_gridRenderer;
-	Rendering::PieceRenderer m_pieceRenderer;
+	GridRenderer m_gridRenderer;
+	PieceRenderer m_pieceRenderer;
 
 	float m_rotation = 0.0f;
 };

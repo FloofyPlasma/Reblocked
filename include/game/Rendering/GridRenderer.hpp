@@ -7,7 +7,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace Reblocked::Game::Rendering
+namespace Reblocked::Game
 {
 
 class GridRenderer
@@ -16,12 +16,12 @@ class GridRenderer
 	GridRenderer();
 
 	void initialize();
-	void render(const World::Grid& grid, Engine::Graphics::Renderer& renderer);
+	void render(const Grid& grid, Engine::Graphics::Renderer& renderer);
 
 	private:
 	void createWireframeMesh(const glm::ivec3& dimensions);
 	void createCubeMesh();
-	void updateFilledCells(const World::Grid& grid);
+	void updateFilledCells(const Grid& grid);
 
 	std::unique_ptr<Engine::Graphics::Mesh> m_wireframeMesh;
 	std::unique_ptr<Engine::Graphics::Mesh> m_cubeMesh;

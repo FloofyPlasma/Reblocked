@@ -3,14 +3,14 @@
 #include "World/Grid.hpp"
 #include "World/Piece.hpp"
 
-namespace Reblocked::Game::Gameplay
+namespace Reblocked::Game
 {
 
 class CollisionDetector
 {
 	public:
-	static bool checkCollision(const World::Piece& piece, const World::Grid& grid);
+	static bool checkCollision(const Piece& piece, const Grid& grid);
 
-	static bool isGrounded(const World::Piece& piece, const World::Grid& grid);
+	static bool isGrounded(const Piece& piece, const Grid& grid);
 };
 }

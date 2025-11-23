@@ -5,7 +5,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace Reblocked::Game::Rendering
+namespace Reblocked::Game
 {
 
 GridRenderer::GridRenderer()
@@ -64,7 +64,7 @@ void GridRenderer::createWireframeMesh(const glm::ivec3& dimensions)
 	m_wireframeMesh->setData(vertices, indices);
 }
 
-void GridRenderer::render(const World::Grid& grid, Engine::Graphics::Renderer& renderer)
+void GridRenderer::render(const Grid& grid, Engine::Graphics::Renderer& renderer)
 {
 	if (!m_wireframeMesh)
 	{

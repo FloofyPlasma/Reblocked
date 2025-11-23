@@ -1,6 +1,6 @@
 #include "World/Grid.hpp"
 
-namespace Reblocked::Game::World
+namespace Reblocked::Game
 {
 
 Grid::Grid(glm::ivec3 dimensions)

@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
-namespace Reblocked::Game::World
+namespace Reblocked::Game
 {
 
 Piece::Piece(const std::vector<BlockOffset>& blocks, uint8_t colorId)

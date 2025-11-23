@@ -2,10 +2,10 @@
 #include "World/Grid.hpp"
 #include "World/Piece.hpp"
 
-namespace Reblocked::Game::Gameplay
+namespace Reblocked::Game
 {
 
-bool CollisionDetector::checkCollision(const World::Piece& piece, const World::Grid& grid)
+bool CollisionDetector::checkCollision(const Piece& piece, const Grid& grid)
 {
 	auto worldPositions = piece.getWorldPositions();
 
@@ -25,9 +25,9 @@ bool CollisionDetector::checkCollision(const World::Piece& piece, const World::G
 	return false;
 }
 
-bool CollisionDetector::isGrounded(const World::Piece& piece, const World::Grid& grid)
+bool CollisionDetector::isGrounded(const Piece& piece, const Grid& grid)
 {
-	World::Piece testPiece = piece;
+	Piece testPiece = piece;
 	testPiece.move({ 0, 0, -1 });
 
 	return checkCollision(testPiece, grid);
