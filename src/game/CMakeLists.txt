@@ -1,8 +1,10 @@
 add_library(ReblockedGame STATIC
     states/TestState.cpp
+    States/PlayingState.cpp
 
     World/Grid.cpp
     World/Piece.cpp
+    World/PieceFactory.cpp
 
     Rendering/GridRenderer.cpp
     Rendering/PieceRenderer.cpp
