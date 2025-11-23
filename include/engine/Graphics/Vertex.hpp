@@ -2,8 +2,9 @@
 
 #include <glm/glm.hpp>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
+
 struct Vertex
 {
 	glm::vec3 position;

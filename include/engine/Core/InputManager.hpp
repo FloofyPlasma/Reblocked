@@ -5,8 +5,9 @@
 
 #include <SDL3/SDL.h>
 
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
+
 enum class GameAction
 {
 	MoveLeft,
@@ -45,5 +46,4 @@ class InputManager
 	std::unordered_set<SDL_Keycode> m_justPressed;
 	std::unordered_set<SDL_Keycode> m_justReleased;
 };
-
 }

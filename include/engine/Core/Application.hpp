@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Window.hpp"
+#include "Core/InputManager.hpp"
+#include "Core/Window.hpp"
+#include "Graphics/Renderer.hpp"
+#include "State/GameStateMachine.hpp"
 
 #include <memory>
 
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
-class Renderer;
-class InputManager;
-class GameStateMachine;
 
 class Application
 {
@@ -23,8 +23,8 @@ class Application
 	void run();
 	void shutdown();
 
-	GameStateMachine& getStateMachine() { return *m_stateMachine; }
-	Renderer& getRenderer() { return *m_renderer; }
+	State::GameStateMachine& getStateMachine() { return *m_stateMachine; }
+	Graphics::Renderer& getRenderer() { return *m_renderer; }
 	InputManager& getInputManager() { return *m_input; }
 	Window& getWindow() { return m_window; }
 
@@ -34,11 +34,10 @@ class Application
 
 	Window m_window;
 
-	std::unique_ptr<Renderer> m_renderer;
-	std::unique_ptr<InputManager> m_input;
-	std::unique_ptr<GameStateMachine> m_stateMachine;
+	std::unique_ptr<Graphics::Renderer> m_renderer;
+	std::unique_ptr<Core::InputManager> m_input;
+	std::unique_ptr<State::GameStateMachine> m_stateMachine;
 
 	bool m_initialized = false;
 };
-
 }

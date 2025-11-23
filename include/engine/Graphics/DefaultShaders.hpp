@@ -1,8 +1,8 @@
-// DefaultShaders.hpp
 #pragma once
+
 #include <string>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
 
 namespace Shaders
@@ -71,6 +71,6 @@ void main()
 }
 )";
 
-} // namespace Shaders
+}
 
-} // namespace Reblocked
+}

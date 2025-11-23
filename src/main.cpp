@@ -1,13 +1,13 @@
-#include "Application.hpp"
+#include "Core/Application.hpp"
 
 // States
-#include "TestState.hpp"
+#include "States/TestState.hpp"
 
 #include <print>
 
 int main()
 {
-	Reblocked::Application app;
+	Reblocked::Engine::Core::Application app;
 
 	if (!app.init())
 	{
@@ -17,7 +17,8 @@ int main()
 
 	auto& stateMachine = app.getStateMachine();
 
-	stateMachine.registerState("test", []() { return std::make_unique<Reblocked::TestState>(); });
+	stateMachine.registerState(
+			"test", []() { return std::make_unique<Reblocked::Game::States::TestState>(); });
 
 	stateMachine.transitionTo("test");
 

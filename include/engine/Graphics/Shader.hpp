@@ -4,18 +4,19 @@
 #include <glm/glm.hpp>
 #include <string>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
-class ShaderProgram
+
+class Shader
 {
 	public:
-	ShaderProgram() = default;
-	~ShaderProgram();
+	Shader() = default;
+	~Shader();
 
-	ShaderProgram(const ShaderProgram&) = delete;
-	ShaderProgram& operator=(const ShaderProgram&) = delete;
-	ShaderProgram(ShaderProgram&& other) noexcept;
-	ShaderProgram& operator=(ShaderProgram&& other) noexcept;
+	Shader(const Shader&) = delete;
+	Shader& operator=(const Shader&) = delete;
+	Shader(Shader&& other) noexcept;
+	Shader& operator=(Shader&& other) noexcept;
 
 	bool loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc);
 	bool loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath);

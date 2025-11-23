@@ -1,6 +1,6 @@
-#include "InputManager.hpp"
+#include "Core/InputManager.hpp"
 
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
 void InputManager::setupDefaultBindings()
 {

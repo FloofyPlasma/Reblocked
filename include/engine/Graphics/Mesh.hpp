@@ -1,19 +1,19 @@
 #pragma once
 
+#include "Graphics/Vertex.hpp"
+
 #include <glad/gl.h>
 #include <vector>
 
-#include "Vertex.hpp"
-
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
+
 class Mesh
 {
 	public:
 	Mesh() = default;
 	~Mesh();
 
-	// Delete copy, allow move
 	Mesh(const Mesh&) = delete;
 	Mesh& operator=(const Mesh&) = delete;
 	Mesh(Mesh&& other) noexcept;

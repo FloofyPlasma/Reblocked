@@ -1,11 +1,8 @@
-#include "GameStateMachine.hpp"
-
-#include "InputManager.hpp"
-#include "Renderer.hpp"
+#include "State/GameStateMachine.hpp"
 
 #include <print>
 
-namespace Reblocked
+namespace Reblocked::Engine::State
 {
 void GameStateMachine::registerState(const std::string& name, StateFactory factory)
 {
@@ -42,7 +39,7 @@ void GameStateMachine::update(float dt)
 	}
 }
 
-void GameStateMachine::render(Renderer& renderer)
+void GameStateMachine::render(Graphics::Renderer& renderer)
 {
 	if (m_currentState)
 	{
@@ -50,7 +47,7 @@ void GameStateMachine::render(Renderer& renderer)
 	}
 }
 
-void GameStateMachine::handleInput(const InputManager& input)
+void GameStateMachine::handleInput(const Core::InputManager& input)
 {
 	if (m_currentState)
 	{

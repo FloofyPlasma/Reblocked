@@ -1,13 +1,14 @@
 #pragma once
 
+#include "Graphics/Camera.hpp"
+#include "Graphics/Mesh.hpp"
+#include "Graphics/Shader.hpp"
+
 #include <glm/glm.hpp>
 #include <memory>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
-class ShaderProgram;
-class Camera;
-class Mesh;
 
 class Renderer
 {
@@ -25,7 +26,7 @@ class Renderer
 	const Camera& getCamera() const { return *m_camera; }
 
 	private:
-	std::unique_ptr<ShaderProgram> m_defaultShader;
+	std::unique_ptr<Shader> m_defaultShader;
 	std::unique_ptr<Camera> m_camera;
 
 	glm::ivec2 m_viewportSize { 1280, 720 };

@@ -1,14 +1,11 @@
-#include "Renderer.hpp"
+#include "Graphics/Renderer.hpp"
 
-#include "Camera.hpp"
-#include "DefaultShaders.hpp"
-#include "Mesh.hpp"
-#include "ShaderProgram.hpp"
+#include "Graphics/DefaultShaders.hpp"
 
 #include <glad/gl.h>
 #include <print>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
 Renderer::Renderer() = default;
 Renderer::~Renderer() = default;
@@ -17,7 +14,7 @@ bool Renderer::init()
 {
 	std::println("Initializing renderer");
 
-	m_defaultShader = std::make_unique<ShaderProgram>();
+	m_defaultShader = std::make_unique<Shader>();
 	if (!m_defaultShader->loadFromSource(Shaders::BasicVertexShader, Shaders::BasicFragmentShader))
 	{
 		std::println(stderr, "Failed tp load default shader");

@@ -1,8 +1,8 @@
-#include "MeshBuilder.hpp"
+#include "Graphics/MeshBuilder.hpp"
 
 #include <glm/glm.hpp>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
 
 std::unique_ptr<Mesh> MeshBuilder::createCube(float size, const glm::vec3& color)
@@ -48,12 +48,42 @@ std::unique_ptr<Mesh> MeshBuilder::createCube(float size, const glm::vec3& color
 	};
 
 	std::vector<uint32_t> indices = {
-		0, 1, 2, 2, 3, 0, // Front
-		4, 5, 6, 6, 7, 4, // Back
-		8, 9, 10, 10, 11, 8, // Right
-		12, 13, 14, 14, 15, 12, // Left
-		16, 17, 18, 18, 19, 16, // Top
-		20, 21, 22, 22, 23, 20, // Bottom
+		0,
+		1,
+		2,
+		2,
+		3,
+		0, // Front
+		4,
+		5,
+		6,
+		6,
+		7,
+		4, // Back
+		8,
+		9,
+		10,
+		10,
+		11,
+		8, // Right
+		12,
+		13,
+		14,
+		14,
+		15,
+		12, // Left
+		16,
+		17,
+		18,
+		18,
+		19,
+		16, // Top
+		20,
+		21,
+		22,
+		22,
+		23,
+		20, // Bottom
 	};
 
 	auto mesh = std::make_unique<Mesh>();

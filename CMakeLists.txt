@@ -11,25 +11,12 @@ find_package(OpenGL REQUIRED)
 include(Dependencies.cmake)
 Reblocked_setup_dependencies()
 
+add_subdirectory(src)
+
 add_executable(Reblocked
-  src/gl.c
-  src/main.cpp
-  src/Window.cpp
-  src/Application.cpp
-  src/InputManager.cpp
-  src/GameStateMachine.cpp
-  src/Renderer.cpp
-  src/ShaderProgram.cpp
-  src/Mesh.cpp
-  src/MeshBuilder.cpp
-  src/Camera.cpp
-  src/TestState.cpp
+    src/main.cpp
 )
 
-target_include_directories(Reblocked PRIVATE include)
+target_link_libraries(Reblocked PRIVATE ReblockedGame)
+target_include_directories(ReblockedGame PUBLIC ${PROJECT_SOURCE_DIR}/include/game)
 
-target_link_libraries(Reblocked PRIVATE
-  SDL3::SDL3-static
-  OpenGL::GL
-  glm::glm
-)

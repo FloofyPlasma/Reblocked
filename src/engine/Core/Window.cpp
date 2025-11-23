@@ -1,13 +1,10 @@
-#include "Window.hpp"
+#include "Core/Window.hpp"
 
 #include <SDL3/SDL_video.h>
+#include <glad/gl.h>
 #include <print>
 
-#include <glad/gl.h>
-
-#include "InputManager.hpp"
-
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
 
 Window::~Window()

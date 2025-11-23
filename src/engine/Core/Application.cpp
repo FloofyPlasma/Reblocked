@@ -1,14 +1,10 @@
-#include "Application.hpp"
-
-#include "GameStateMachine.hpp"
-#include "InputManager.hpp"
-#include "Renderer.hpp"
+#include "Core/Application.hpp"
 
 #include <chrono>
 #include <memory>
 #include <print>
 
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
 Application::Application() = default;
 
@@ -32,7 +28,7 @@ bool Application::init()
 		return false;
 	}
 
-	m_renderer = std::make_unique<Renderer>();
+	m_renderer = std::make_unique<Graphics::Renderer>();
 	if (!m_renderer->init())
 	{
 		std::println(stderr, "Failed to initialize renderer");
@@ -45,7 +41,7 @@ bool Application::init()
 	m_input = std::make_unique<InputManager>();
 	m_input->setupDefaultBindings();
 
-	m_stateMachine = std::make_unique<GameStateMachine>();
+	m_stateMachine = std::make_unique<State::GameStateMachine>();
 
 	m_initialized = true;
 	std::println("Initializing complete");

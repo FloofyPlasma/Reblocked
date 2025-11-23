@@ -1,13 +1,14 @@
 #pragma once
 
+#include "Core/InputManager.hpp"
+
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
 
 #include <string>
 
-namespace Reblocked
+namespace Reblocked::Engine::Core
 {
-class InputManager;
 
 class Window
 {

@@ -7,7 +7,7 @@
 *.{bat,[bB][aA][tT]} text eol=crlf
 *.{vcxproj,vcxproj.filters} text eol=crlf
 
-src/gl.c linguist-generated
+src/engine/gl.c linguist-generated
 include/glad/gl.h linguist-generated
 include/KHR/khrplatform.h linguist-generated
 

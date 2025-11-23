@@ -2,8 +2,9 @@
 
 #include <glm/glm.hpp>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
+
 class Camera
 {
 	public:

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Mesh.hpp"
+#include "Graphics/Mesh.hpp"
 
 #include <memory>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
 
 class MeshBuilder
@@ -14,5 +14,4 @@ class MeshBuilder
 	static std::unique_ptr<Mesh> createPlane(
 			float width, float depth, const glm::vec3& color = { 0.5f, 0.5f, 0.5f });
 };
-
 }

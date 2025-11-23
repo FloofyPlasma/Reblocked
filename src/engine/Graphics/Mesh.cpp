@@ -1,8 +1,8 @@
-#include "Mesh.hpp"
+#include "Graphics/Mesh.hpp"
 
 #include <glad/gl.h>
 
-namespace Reblocked
+namespace Reblocked::Engine::Graphics
 {
 
 Mesh::~Mesh() { cleanup(); }
