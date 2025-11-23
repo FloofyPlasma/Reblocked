@@ -73,18 +73,17 @@ void Application::run()
 			deltaTime = 0.25f;
 
 		m_window.pollEvents(m_input.get());
-		m_input->update();
 
 		update(deltaTime);
 
 		render();
 		m_window.swap();
+
+		m_input->update();
 	}
 }
 void Application::update(float deltaTime)
 {
-	m_input->update();
-
 	if (m_input->isActionPressed(GameAction::Quit))
 	{
 	}
