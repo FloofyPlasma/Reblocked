@@ -26,7 +26,7 @@ struct GameRules
 
 	glm::ivec3 getSpawnPosition() const
 	{
-		return glm::ivec3 { gridSize.x / 2, gridSize.y / 2, gridSize.z - 3 };
+		return glm::ivec3 { gridSize.x / 2, gridSize.y / 2, gridSize.z - 1 };
 	}
 
 	float getDropInterval(int level) const

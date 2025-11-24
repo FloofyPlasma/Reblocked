@@ -40,6 +40,7 @@ class Piece
 	const std::vector<BlockOffset>& getBlocks() const { return m_blocks; }
 	uint8_t getColorId() const { return m_colorId; }
 	glm::quat getRotation() const { return m_rotation; }
+	void setRotation(const glm::quat& rotation) { m_rotation = rotation; }
 
 	private:
 	std::vector<BlockOffset> m_blocks;

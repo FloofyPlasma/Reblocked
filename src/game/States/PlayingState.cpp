@@ -47,12 +47,47 @@ void PlayingState::exit()
 void PlayingState::spawnNewPiece()
 {
 	m_currentPiece = std::move(m_nextPiece);
-	m_currentPiece->setPosition(m_rules.getSpawnPosition());
+
+	auto blocks = m_currentPiece->getBlocks();
+	glm::ivec3 minOffset(999, 999, 999);
+	glm::ivec3 maxOffset(-999, -999, -999);
+
+	for (const auto& block : blocks)
+	{
+		minOffset = glm::min(minOffset, block.offset);
+		maxOffset = glm::max(maxOffset, block.offset);
+	}
+
+	glm::ivec3 pieceSize = maxOffset - minOffset + glm::ivec3(1);
+
+	glm::ivec3 spawnPos { (m_rules.gridSize.x - pieceSize.x) / 2 - minOffset.x,
+		(m_rules.gridSize.y - pieceSize.y) / 2 - minOffset.y, m_rules.gridSize.z - 1 };
+
+	m_currentPiece->setPosition(spawnPos);
 
 	m_nextPiece = m_pieceFactory.createRandomPiece();
 	m_nextPiece->setPosition({ -m_rules.gridSize.x + 2, 1, m_rules.gridSize.z - 5 });
 
-	if (CollisionDetector::checkCollision(*m_currentPiece, *m_grid))
+	if (!CollisionDetector::checkCollision(*m_currentPiece, *m_grid))
+	{
+		return;
+	}
+
+	bool foundSpace = false;
+
+	for (int z = spawnPos.z - 1; z >= 0; --z)
+	{
+		m_currentPiece->setPosition({ spawnPos.x, spawnPos.y, z });
+
+		if (!CollisionDetector::checkCollision(*m_currentPiece, *m_grid))
+		{
+			foundSpace = true;
+
+			break;
+		}
+	}
+
+	if (!foundSpace)
 	{
 		m_gameOver = true;
 		std::println("GAME OVER - No space for new piece!");
@@ -76,14 +111,17 @@ bool PlayingState::tryMovePiece(const glm::ivec3& delta)
 bool PlayingState::tryRotatePiece(void (Piece::*rotateFunc)())
 {
 	glm::ivec3 oldPos = m_currentPiece->getPosition();
+	glm::quat oldRotation = m_currentPiece->getRotation();
 
 	(m_currentPiece.get()->*rotateFunc)();
 
 	if (CollisionDetector::checkCollision(*m_currentPiece, *m_grid))
 	{
 		std::vector<glm::ivec3> kicks = {
-			{ 1, 0, 0 }, { -1, 0, 0 }, { 0, 1, 0 }, { 0, -1, 0 }, // Horizontal
-			{ 1, 1, 0 }, { -1, -1, 0 }, { 1, -1, 0 }, { -1, 1, 0 } // Diagonal
+			{ 1, 0, 0 }, { -1, 0, 0 }, // Left/right
+			{ 0, 1, 0 }, { 0, -1, 0 }, // Forward/back
+			{ 1, 1, 0 }, { -1, -1, 0 }, // Diagonal
+			{ 1, -1, 0 }, { -1, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 } // Up/down (rare but possible)
 		};
 
 		bool kickSucceeded = false;
@@ -100,8 +138,8 @@ bool PlayingState::tryRotatePiece(void (Piece::*rotateFunc)())
 
 		if (!kickSucceeded)
 		{
-			// Rotation failed - would need to reverse rotation here
-			// For now, just accept the collision
+			m_currentPiece->setPosition(oldPos);
+			m_currentPiece->setRotation(oldRotation);
 			return false;
 		}
 	}
@@ -208,7 +246,7 @@ void PlayingState::render(Engine::Graphics::Renderer& renderer)
 		m_rules.gridSize.z / 2.5f };
 
 	float distance = std::max(m_rules.gridSize.x, m_rules.gridSize.y) * 3.0f;
-	glm::vec3 cameraPos = gridCenter + glm::vec3(0, 0, distance);
+	glm::vec3 cameraPos = gridCenter + glm::vec3(0, 0, distance + 3);
 
 	camera.setPosition(cameraPos);
 	camera.lookAt(gridCenter);
