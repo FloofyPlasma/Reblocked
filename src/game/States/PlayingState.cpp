@@ -255,6 +255,15 @@ void PlayingState::render(Engine::Graphics::Renderer& renderer)
 
 	if (m_currentPiece && !m_gameOver)
 	{
+		glm::ivec3 ghostPos = calculateGhostPosition();
+
+		if (ghostPos.z < m_currentPiece->getPosition().z)
+		{
+			Piece ghostPiece = *m_currentPiece;
+			ghostPiece.setPosition(ghostPos);
+			m_pieceRenderer.render(ghostPiece, renderer, 0.3f);
+		}
+
 		m_pieceRenderer.render(*m_currentPiece, renderer);
 	}
 
@@ -319,4 +328,35 @@ void PlayingState::handleInput(const Reblocked::Engine::Core::InputManager& inpu
 		lockPiece();
 	}
 }
+
+glm::ivec3 PlayingState::calculateGhostPosition() const
+{
+	if (!m_currentPiece)
+		return { 0, 0, 0 };
+
+	glm::ivec3 ghostPos = m_currentPiece->getPosition();
+
+	while (true)
+	{
+		Piece testPiece = *m_currentPiece;
+		testPiece.setPosition(ghostPos + glm::ivec3(0, 0, -1));
+
+		if (CollisionDetector::checkCollision(testPiece, *m_grid))
+		{
+			// Hit something - current ghostPos is the landing position
+			break;
+		}
+
+		ghostPos.z--;
+
+		if (ghostPos.z < 0)
+		{
+			ghostPos.z = 0;
+			break;
+		}
+	}
+
+	return ghostPos;
+}
+
 }

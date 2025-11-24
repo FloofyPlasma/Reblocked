@@ -36,6 +36,8 @@ class PlayingState : public Engine::State::GameState
 	void updateLevel();
 	bool isGameOver();
 
+	glm::ivec3 calculateGhostPosition() const;
+
 	std::unique_ptr<Grid> m_grid;
 	std::unique_ptr<Piece> m_currentPiece;
 	std::unique_ptr<Piece> m_nextPiece;

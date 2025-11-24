@@ -46,7 +46,8 @@ void Renderer::clear(const glm::vec4& color)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::drawMesh(const Mesh& mesh, const glm::mat4& transform)
+void Renderer::drawMesh(
+		const Mesh& mesh, const glm::mat4& transform, const glm::vec3& color, float alpha)
 {
 	if (!mesh.isValid() || !m_defaultShader->isValid())
 	{
@@ -59,8 +60,21 @@ void Renderer::drawMesh(const Mesh& mesh, const glm::mat4& transform)
 	m_defaultShader->setUniform("uView", m_camera->getViewMatrix());
 	m_defaultShader->setUniform("uProjection", m_camera->getProjectionMatrix());
 	m_defaultShader->setUniform("uViewPos", m_camera->getPosition());
+	m_defaultShader->setUniform("uObjectColor", color);
+	m_defaultShader->setUniform("uAlpha", alpha);
+
+	if (alpha < 1.0f)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 
 	mesh.draw();
+
+	if (alpha < 1.0f)
+	{
+		glDisable(GL_BLEND);
+	}
 
 	m_defaultShader->unbind();
 }

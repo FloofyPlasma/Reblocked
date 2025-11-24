@@ -27,6 +27,9 @@ class Piece
 	public:
 	Piece(const std::vector<BlockOffset>& blocks, uint8_t colorId);
 
+	Piece(const Piece& other) = default;
+	Piece& operator=(const Piece& other) = default;
+
 	void move(const glm::ivec3& delta) { m_position += delta; }
 	void setPosition(const glm::ivec3& pos) { m_position = pos; }
 	glm::ivec3 getPosition() const { return m_position; }

@@ -11,6 +11,12 @@ namespace Reblocked::Engine::Graphics
 class Mesh
 {
 	public:
+	enum class Primitive : GLenum
+	{
+		Triangles = GL_TRIANGLES,
+		Lines = GL_LINES
+	};
+
 	Mesh() = default;
 	~Mesh();
 
@@ -20,6 +26,7 @@ class Mesh
 	Mesh& operator=(Mesh&& other) noexcept;
 
 	void setData(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
+	void setPrimitive(Primitive p) { m_primitive = p; }
 	void draw() const;
 
 	bool isValid() const { return m_vao != 0; }
@@ -31,5 +38,6 @@ class Mesh
 	GLuint m_vbo = 0;
 	GLuint m_ebo = 0;
 	size_t m_indexCount = 0;
+	Primitive m_primitive = Primitive::Triangles;
 };
 }
