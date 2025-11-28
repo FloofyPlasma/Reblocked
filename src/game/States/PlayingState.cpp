@@ -4,6 +4,7 @@
 #include "Gameplay/CollisionDetector.hpp"
 #include "Graphics/Renderer.hpp"
 
+#include <algorithm>
 #include <print>
 
 namespace Reblocked::Game

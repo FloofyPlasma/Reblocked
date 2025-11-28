@@ -1,5 +1,7 @@
 #include "World/Grid.hpp"
 
+#include <algorithm>
+
 namespace Reblocked::Game
 {
 
