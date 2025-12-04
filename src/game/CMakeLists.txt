@@ -1,5 +1,5 @@
 add_library(ReblockedGame STATIC
-    states/TestState.cpp
+    States/TestState.cpp
     States/PlayingState.cpp
 
     World/Grid.cpp
